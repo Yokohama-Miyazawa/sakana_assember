@@ -42,6 +42,19 @@ def assemble(input_file_name):
     else:
         try:
             for line in f:
+                if '#' == line[0]:
+                    print('comment:',line, end='')
+                    continue
+                if '#' in line:
+                    tmp = line.split('#')
+                    line, comment = tmp[0], tmp[1]
+                    print('comment:' ,comment, end='')
+                else:
+                    pass
+                bin_code = asm_to_bin(line)
+                print(bin_code[:-1], end=' ')
+                print(line[:-1])
+                o.write(bin_code)
                 bin_code = asm_to_bin(line)
                 print(bin_code[:-1], end=' ')
                 print(line, end='')
