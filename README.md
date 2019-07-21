@@ -24,3 +24,13 @@
 $ python sakana_assembler.py code.asm
 ```  
 出力ファイル名は`out.txt`で固定です．  
+
+### コメント
+`#`の後ろは、コメントとして認識されます。
+```
+MOV A, 0 # line end comment
+# line comment
+```
+以上の二種類のコメントがサポートされています。
+
+
