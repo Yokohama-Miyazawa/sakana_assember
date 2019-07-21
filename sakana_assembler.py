@@ -1,4 +1,5 @@
 import sys
+import argparse
 
 
 def asm_to_bin(asm):
@@ -33,10 +34,10 @@ def asm_to_bin(asm):
         raise Exception
 
 
-def assemble(input_file_name):
+def assemble(input_file_name, output_file_name='out.txt'):
     try:
         f = open(input_file_name)
-        o = open("out.txt", "w", encoding="UTF-8")
+        o = open(output_file_name, "w", encoding="UTF-8")
     except FileNotFoundError:
         print("{}というファイルは存在しません．".format(input_file_name))
     else:
@@ -55,22 +56,28 @@ def assemble(input_file_name):
                 print(bin_code[:-1], end=' ')
                 print(line[:-1])
                 o.write(bin_code)
-                bin_code = asm_to_bin(line)
-                print(bin_code[:-1], end=' ')
-                print(line, end='')
-                o.write(bin_code)
         finally:
             f.close()
             o.close()
 
 
 if __name__ == '__main__':
-    args = sys.argv
+    #args = sys.argv
+    parser = argparse.ArgumentParser()
+    parser.add_argument("source_file", type=str,
+                                help="入力ファイルのファイル名を指定")
+    parser.add_argument("-o", "--output", type=str,
+                                help="出力ファイルのファイル名を指定、指定しない時のデフォルトは`out.txt`")
+    args = parser.parse_args()
+
+    print(args)
 
     try:
-        input_file_name = args[1]
-    except IndexError:
-        print("入力ファイルが指定されていません．\n例: python sakana_assembler.py code.asm")
-    else:
-        print(input_file_name)
-        assemble(input_file_name)
+        if args.output != None:
+            assemble(args.source_file, args.output)
+        else:
+            assemble(args.source_file)
+    except:
+        print("形式に沿って実行してください\n例: python sakana_assembler.py code.asm")
+
+
