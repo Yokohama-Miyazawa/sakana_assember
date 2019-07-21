@@ -36,29 +36,50 @@ def asm_to_bin(asm):
 
 def assemble(input_file_name, output_file_name='out.txt'):
     try:
-        f = open(input_file_name)
-        o = open(output_file_name, "w", encoding="UTF-8")
-    except FileNotFoundError:
-        print("{}というファイルは存在しません．".format(input_file_name))
-    else:
-        try:
+        with open(input_file_name) as f:
+            bin_code = ''
             for line in f:
                 if '#' == line[0]:
                     print('comment:',line, end='')
                     continue
-                if '#' in line:
+                elif '#' in line:
                     tmp = line.split('#')
                     line, comment = tmp[0], tmp[1]
                     print('comment:' ,comment, end='')
                 else:
                     pass
-                bin_code = asm_to_bin(line)
-                print(bin_code[:-1], end=' ')
+                bin_code += asm_to_bin(line)
+                print(asm_to_bin(line)[:-1], end=' ')
                 print(line[:-1])
-                o.write(bin_code)
-        finally:
-            f.close()
-            o.close()
+        with open(output_file_name, 'w', encoding='UTF-8') as o:
+            o.write(bin_code)
+
+    except FileNotFoundError:
+        print("{}というファイルは存在しません．".format(input_file_name))
+#    try:
+#        f = open(input_file_name)
+#        o = open(output_file_name, "w", encoding="UTF-8")
+#    except FileNotFoundError:
+#        print("{}というファイルは存在しません．".format(input_file_name))
+#    else:
+#        try:
+#            for line in f:
+#                if '#' == line[0]:
+#                    print('comment:',line, end='')
+#                    continue
+#                if '#' in line:
+#                    tmp = line.split('#')
+#                    line, comment = tmp[0], tmp[1]
+#                    print('comment:' ,comment, end='')
+#                else:
+#                    pass
+#                bin_code = asm_to_bin(line)
+#                print(bin_code[:-1], end=' ')
+#                print(line[:-1])
+#                o.write(bin_code)
+#        finally:
+#            f.close()
+#            o.close()
 
 
 if __name__ == '__main__':
@@ -69,8 +90,6 @@ if __name__ == '__main__':
     parser.add_argument("-o", "--output", type=str,
                                 help="出力ファイルのファイル名を指定、指定しない時のデフォルトは`out.txt`")
     args = parser.parse_args()
-
-    print(args)
 
     try:
         if args.output != None:
