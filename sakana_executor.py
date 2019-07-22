@@ -16,7 +16,10 @@ def read_file(input_file_name):
         print("{}というファイルは存在しません．".format(input_file_name))
         raise FileNotFoundError
 
-def bin_exe(A, B, binary_code='0000'):
+def bin_exe(A, B, binary_code='0000', A_size=4, B_size=4):
+    # defalut register size is 4 bit
+    A_size = 2**A_size
+    B_size = 2**B_size
     if binary_code == '0000':
         bin_to_result = (A, B)
     elif binary_code == '0001':
@@ -34,20 +37,54 @@ def bin_exe(A, B, binary_code='0000'):
     elif binary_code == '0111':
         bin_to_result = (B, B)   # A = B
     elif binary_code == '1000':
-        bin_to_result = (A+1, B) # A = A + 1
+        if A+1 > A_size:
+            print('register overflow:',A,'+ 1 >',A_size)
+        bin_to_result = ((A+1)%A_size, B) # A = A + 1
     elif binary_code == '1001':
-        bin_to_result = (A+2, B) # A = A + 2
+        if A+2 > A_size:
+            print('register overflow:',A,'+ 2 >',A_size)
+        bin_to_result = ((A+2)%A_size, B) # A = A + 2
     elif binary_code == '1010':
-        bin_to_result = (A*2, B) # A = A * 2
+        if A*2 > A_size:
+            print('register overflow:',A,'* 2 >',A_size)
+        bin_to_result = ((A*2)%A_size, B) # A = A * 2
     elif binary_code == '1011':
-        bin_to_result = (A+B, B) # A = A + B
+        if A+B > A_size:
+            print('register overflow:',A,'*', B, '>', A_size)
+        bin_to_result = ((A+B)%A_size, B) # A = A + B
 
     return bin_to_result
 
-def show_command_and_registers(A, B, line, option='number'):
-    if option == 'number':
-        print(line,'A:',A,'B:',B)
+def to_color(s):
+    if s == '0':
+        return '\x1b[0;37;47m'+s+'\x1b[0m' # white
+    elif s == '1':
+        return '\x1b[0;31;41m'+s+'\x1b[0m' # red
+    else:
+        return '\x1b[0;33;43m'+s+'\x1b[0m' # yellow
 
+def to_bin(num):
+    return bin(num)[2:]
+
+def to_color_bin(num, size=4):
+    # defalut register size is 4 bit
+    if num != None:
+        return ''.join([to_color(i) for i in to_bin(num).rjust(size, '0')])
+    else:
+        return ''.join([to_color('*') for i in range(size)])
+
+def show_command_and_registers(A, B, line, option='color', size=4):
+
+    if option == 'number':
+        if line == 'init':
+            print('      A:',A, '\tB:',B)
+        else:
+            print(line,' A:',A,'\tB:',B)
+    elif option == 'color':
+        if line == 'init':
+            print('      A:',to_color_bin(A, size), '\tB:',to_color_bin(B, size))
+        else:
+            print(line, ' A:',to_color_bin(A, size), '\tB:',to_color_bin(B, size))
 
 
 if __name__ == '__main__':
@@ -61,10 +98,12 @@ if __name__ == '__main__':
     except IndexError:
         print("入力ファイルが指定されていません．\n例: python sakana_executor.py output_file.out")
     A, B = None, None
-    show_command_and_registers(A, B, lines[0])
+    print('init: ',end='')
+    show_command_and_registers(A, B, 'init')
     try:
         for i, line in enumerate(lines):
             A, B = bin_exe(A, B, line)
+            print(str(i).rjust(3),': ',end='')
             show_command_and_registers(A, B, line)
     except:
         print('File"'+args.source_file+'", Line',i,'in command',line)
