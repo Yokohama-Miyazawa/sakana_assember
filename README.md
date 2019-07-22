@@ -23,7 +23,12 @@
 ```
 $ python sakana_assembler.py code.asm
 ```  
-出力ファイル名は`out.txt`で固定です．  
+出力ファイル名が省略されたときは`out.txt`で固定されます。  
+
+出力ファイル名の指定は以下のようにできます
+```
+$ python sakana_assembler.py code.asm -o output.out
+```
 
 ### コメント
 `#`の後ろは、コメントとして認識されます。
