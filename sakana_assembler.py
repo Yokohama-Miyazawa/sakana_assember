@@ -39,7 +39,6 @@ def assemble(input_file_name, output_file_name='out.txt'):
         with open(input_file_name) as f:
             bin_code = ''
             for line in f:
-                print('check:',line)
                 if '#' == line[0]:
                     print('comment:',line, end='')
                     continue
@@ -75,6 +74,6 @@ if __name__ == '__main__':
         else:
             assemble(args.source_file)
     except:
-        print("形式に沿って実行してください\n例: python sakana_assembler.py code.asm")
+        print("形式に沿って実行してください\n例: python3 sakana_assembler.py code.asm")
 
 
