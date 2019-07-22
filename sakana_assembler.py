@@ -39,6 +39,7 @@ def assemble(input_file_name, output_file_name='out.txt'):
         with open(input_file_name) as f:
             bin_code = ''
             for line in f:
+                print('check:',line)
                 if '#' == line[0]:
                     print('comment:',line, end='')
                     continue
@@ -46,6 +47,9 @@ def assemble(input_file_name, output_file_name='out.txt'):
                     tmp = line.split('#')
                     line, comment = tmp[0], tmp[1]
                     print('comment:' ,comment, end='')
+                elif '\n' == line:
+                    print('no command line, skip')
+                    continue
                 else:
                     pass
                 bin_code += asm_to_bin(line)
@@ -53,34 +57,8 @@ def assemble(input_file_name, output_file_name='out.txt'):
                 print(line[:-1])
         with open(output_file_name, 'w', encoding='UTF-8') as o:
             o.write(bin_code)
-
     except FileNotFoundError:
         print("{}というファイルは存在しません．".format(input_file_name))
-#    try:
-#        f = open(input_file_name)
-#        o = open(output_file_name, "w", encoding="UTF-8")
-#    except FileNotFoundError:
-#        print("{}というファイルは存在しません．".format(input_file_name))
-#    else:
-#        try:
-#            for line in f:
-#                if '#' == line[0]:
-#                    print('comment:',line, end='')
-#                    continue
-#                if '#' in line:
-#                    tmp = line.split('#')
-#                    line, comment = tmp[0], tmp[1]
-#                    print('comment:' ,comment, end='')
-#                else:
-#                    pass
-#                bin_code = asm_to_bin(line)
-#                print(bin_code[:-1], end=' ')
-#                print(line[:-1])
-#                o.write(bin_code)
-#        finally:
-#            f.close()
-#            o.close()
-
 
 if __name__ == '__main__':
     #args = sys.argv
