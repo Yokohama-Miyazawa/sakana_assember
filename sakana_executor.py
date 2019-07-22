@@ -103,6 +103,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("source_file", type=str,
                                 help="入力ファイルのファイル名を指定")
+    parser.add_argument("-f","--format", type=str,
+                                help="入力ファイルのファイル名を指定")
     args = parser.parse_args()
 
     try:
@@ -111,12 +113,12 @@ if __name__ == '__main__':
         print("入力ファイルが指定されていません．\n例: python sakana_executor.py output_file.out")
     A, B = None, None
     print('init: ',end='')
-    show_command_and_registers(A, B, 'init')
+    show_command_and_registers(A, B, 'init', args.format)
     try:
         for i, line in enumerate(lines):
             A, B = bin_exe(A, B, line)
             print(str(i).rjust(3),': ',end='')
-            show_command_and_registers(A, B, line)
+            show_command_and_registers(A, B, line, args.format)
     except:
         print('File"'+args.source_file+'", Line',i,'in command',line)
         
