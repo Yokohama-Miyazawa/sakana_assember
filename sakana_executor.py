@@ -38,22 +38,22 @@ def bin_exe(A, B, binary_code='0000', A_size=4, B_size=4):
         bin_to_result = (A, A)   # A = B
     elif binary_code == '1000':
         if A+1 >= A_size:
-            print('register overflow:',A,'+ 1 >',A_size,
+            print('register overflow:',A,'+ 1 >=',A_size,
                     'register was reset to',(A+1)%A_size)
         bin_to_result = ((A+1)%A_size, B) # A = A + 1
     elif binary_code == '1001':
         if A+2 >= A_size:
-            print('register overflow:',A,'+ 2 >',A_size,
+            print('register overflow:',A,'+ 2 >=',A_size,
                     'register was reset to',(A+2)%A_size)
         bin_to_result = ((A+2)%A_size, B) # A = A + 2
     elif binary_code == '1010':
         if A*2 >= A_size:
-            print('register overflow:',A,'* 2 >',A_size,
+            print('register overflow:',A,'* 2 >=',A_size,
                     'register was reset to',(A*2)%A_size)
         bin_to_result = ((A*2)%A_size, B) # A = A * 2
     elif binary_code == '1011':
         if A+B >= A_size:
-            print('register overflow:',A,'*', B, '>', A_size,
+            print('register overflow:',A,'*', B, '>=', A_size,
                     'register was reset to',(A+B)%A_size)
         bin_to_result = ((A+B)%A_size, B) # A = A + B
 
@@ -92,7 +92,8 @@ def show_command_and_registers(A, B, line, option='', size=4):
     else:
         if line == 'init':
             print('      A:'+str(A).rjust(5, ' '),'|',to_color_bin(A, size),
-                    '\tB:'+str(B).rjust(5, ' '), '|',to_color_bin(B, size))
+                    '\tB:'+str(B).rjust(5, ' '), '|',to_color_bin(B, size),
+                    )
         else:
             print(line, ' A:'+str(A).rjust(5, ' '), '|', to_color_bin(A, size),
                     '\tB:'+str(B).rjust(5, ' ') ,'|' ,to_color_bin(B, size))
