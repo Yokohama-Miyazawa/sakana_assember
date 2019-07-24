@@ -53,7 +53,7 @@ def bin_exe(A, B, binary_code='0000', A_size=4, B_size=4):
         bin_to_result = ((A*2)%A_size, B) # A = A * 2
     elif binary_code == '1011':
         if A+B >= A_size:
-            print('register overflow:',A,'*', B, '>=', A_size,
+            print('register overflow:',A,'+', B, '>=', A_size,
                     'register was reset to',(A+B)%A_size)
         bin_to_result = ((A+B)%A_size, B) # A = A + B
 
@@ -114,12 +114,12 @@ if __name__ == '__main__':
         print("入力ファイルが指定されていません．\n例: python sakana_executor.py output_file.out")
     A, B = None, None
     print('init: ',end='')
-    show_command_and_registers(A, B, 'init', args.format)
+    show_command_and_registers(A, B, 'init', args.format, size=4)
     try:
         for i, line in enumerate(lines):
-            A, B = bin_exe(A, B, line)
+            A, B = bin_exe(A, B, line, A_size=4, B_size=4)
             print(str(i).rjust(3),': ',end='')
-            show_command_and_registers(A, B, line, args.format)
+            show_command_and_registers(A, B, line, args.format, size=4)
     except:
         print('File"'+args.source_file+'", Line',i,'in command',line)
         
