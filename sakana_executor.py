@@ -3,15 +3,12 @@ import sys
 import argparse
 
 def read_file(input_file_name):
-    #if input_file_name in os.dir():
-    #    print('file in dir')
     try:
         with open(input_file_name) as f:
             lines = []
             for line in f:
                 lines.append(line[:-1])
             return lines
-    #else:
     except:
         print("{}というファイルは存在しません．".format(input_file_name))
         raise FileNotFoundError
@@ -105,20 +102,24 @@ if __name__ == '__main__':
     parser.add_argument("source_file", type=str,
                                 help="入力ファイルのファイル名を指定")
     parser.add_argument("-f","--format", type=str,
-                                help="入力ファイルのファイル名を指定")
+                                help="表示フォーマットの指定, color, number, defaultは両方")
+    parser.add_argument("-a","--all", action='store_true',
+                                help="全部のコマンドを一気に実行")
     args = parser.parse_args()
 
     try:
         lines = read_file(args.source_file)
     except IndexError:
-        print("入力ファイルが指定されていません．\n例: python sakana_executor.py output_file.out")
+        print("入力ファイルが指定されていません．\n例: python3 sakana_executor.py program.txt")
     A, B = None, None
-    print('init: ',end='')
+    print('init : ',end='')
     show_command_and_registers(A, B, 'init', args.format, size=4)
     try:
         for i, line in enumerate(lines):
+            if not args.all:
+                input('enter を押して次のコマンド')
             A, B = bin_exe(A, B, line, A_size=4, B_size=4)
-            print(str(i).rjust(3),': ',end='')
+            print(str(to_bin(i)).rjust(4, '0'),': ',end='')
             show_command_and_registers(A, B, line, args.format, size=4)
     except:
         print('File"'+args.source_file+'", Line',i,'in command',line)
