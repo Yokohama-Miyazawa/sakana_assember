@@ -1,0 +1,10 @@
+# NOP命令は？
+MOV A, 0
+MOV B, 0
+ADD A, 1
+ADD A, 2
+NOP
+NOP
+NOP
+ADD A, A
+ADD A, A
