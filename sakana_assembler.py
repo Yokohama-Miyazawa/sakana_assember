@@ -34,7 +34,7 @@ def asm_to_bin(asm):
         raise Exception
 
 
-def assemble(input_file_name, output_file_name='out.txt'):
+def assemble(input_file_name, output_file_name='program.txt'):
     try:
         with open(input_file_name) as f:
             bin_code = ''
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     parser.add_argument("source_file", type=str,
                                 help="入力ファイルのファイル名を指定")
     parser.add_argument("-o", "--output", type=str,
-                                help="出力ファイルのファイル名を指定、指定しない時のデフォルトは`out.txt`")
+                                help="出力ファイルのファイル名を指定、指定しない時のデフォルトは`program.txt`")
     args = parser.parse_args()
 
     try:
