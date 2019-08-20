@@ -3,9 +3,14 @@ import argparse
 
 
 def asm_to_bin(asm):
-    inst = asm[0:3]
+    inst = asm[0:4]
+    if inst == "HALT":
+        return "1100\n"
+    inst = inst[0:3]
     if inst == "NOP":
         return "0000\n"
+    elif inst == "RND":
+        return "0011\n"
     elif inst == "MOV":
         arg0, arg1 = asm[4], asm[7]
         if arg0 == "A" and arg1 == "0":
@@ -40,12 +45,12 @@ def assemble(input_file_name, output_file_name='program.txt'):
             bin_code = ''
             for line in f:
                 if '#' == line[0]:
-                    print('comment:',line, end='')
+                    print('comment:', line, end='')
                     continue
                 elif '#' in line:
                     tmp = line.split('#')
                     line, comment = tmp[0], tmp[1]
-                    print('comment:' ,comment, end='')
+                    print('comment:', comment, end='')
                 elif '\n' == line:
                     print('no command line, skip')
                     continue
@@ -59,21 +64,20 @@ def assemble(input_file_name, output_file_name='program.txt'):
     except FileNotFoundError:
         print("{}というファイルは存在しません．".format(input_file_name))
 
+
 if __name__ == '__main__':
-    #args = sys.argv
+    # args = sys.argv
     parser = argparse.ArgumentParser()
     parser.add_argument("source_file", type=str,
-                                help="入力ファイルのファイル名を指定")
+                        help="入力ファイルのファイル名を指定")
     parser.add_argument("-o", "--output", type=str,
-                                help="出力ファイルのファイル名を指定、指定しない時のデフォルトは`program.txt`")
+                        help="出力ファイルのファイル名を指定、指定しない時のデフォルトは`program.txt`")
     args = parser.parse_args()
 
     try:
-        if args.output != None:
+        if args.output is not None:
             assemble(args.source_file, args.output)
         else:
             assemble(args.source_file)
     except:
         print("形式に沿って実行してください\n例: python3 sakana_assembler.py code.asm")
-
-
